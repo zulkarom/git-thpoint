@@ -17,9 +17,9 @@ class CustomerRewardSearch extends CustomerReward
     public function rules()
     {
         return [
-            [['id', 'customer_id', 'campaign_id', 'reward_type', 'product_reward_id', 'has_claimed', 'issue_claim_by'], 'integer'],
+            [['id', 'customer_id', 'campaign_id', 'product_reward_id', 'has_claimed', 'issue_claim_by'], 'integer'],
             [['reward_at', 'claimed_at'], 'safe'],
-            [['cash_value'], 'number'],
+            [['point_value'], 'number'],
         ];
     }
 
@@ -63,9 +63,7 @@ class CustomerRewardSearch extends CustomerReward
             'customer_id' => $this->customer_id,
             'campaign_id' => $this->campaign_id,
             'reward_at' => $this->reward_at,
-            'reward_type' => $this->reward_type,
             'product_reward_id' => $this->product_reward_id,
-            'cash_value' => $this->cash_value,
             'has_claimed' => $this->has_claimed,
             'claimed_at' => $this->claimed_at,
             'issue_claim_by' => $this->issue_claim_by,

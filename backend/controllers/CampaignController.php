@@ -78,8 +78,14 @@ class CampaignController extends Controller
     {
         $model = new Campaign();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+			if($model->is_default == 1){
+				Campaign::updateAll(['is_default' => 0]);
+			}
+			
+            if($model->save()){
+				return $this->redirect(['view', 'id' => $model->id]);
+			}
         }
 
         return $this->render('create', [
@@ -98,8 +104,14 @@ class CampaignController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+			if($model->is_default == 1){
+				Campaign::updateAll(['is_default' => 0]);
+			}
+			if($model->save()){
+				return $this->redirect(['view', 'id' => $model->id]);
+			}
+            
         }
 
         return $this->render('update', [

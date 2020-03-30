@@ -36,7 +36,7 @@ class Campaign extends \yii\db\ActiveRecord
         return [
             [['reward_type',  'campaign_name'], 'required'],
 			
-            [['reward_type', 'is_active'], 'integer'],
+            [['reward_type', 'is_active', 'is_default'], 'integer'],
 			
             [['cash_value', 'reward_point_at'], 'number'],
 			

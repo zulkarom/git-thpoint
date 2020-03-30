@@ -58,9 +58,9 @@ $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@frontend/views/weba
 				
 				<li class="nav-item"><a href="<?=Url::to(['/staff/index'])?>" class="nav-link"><i class="icon-user"></i> <?=Yii::$app->user->identity->fullname?></a></li>
 				
-				<li class="nav-item"><a href="<?=Url::to(['/staff/index'])?>" class="nav-link"><i class="icon-check"></i> Key In</a></li>
+				<li class="nav-item"><a href="#" class="nav-link" id="slide-point"><i class="icon-check"></i> Submit Point</a></li>
 				
-				<li class="nav-item"><a href="<?=Url::to(['/staff/new-participant'])?>" class="nav-link"><i class="icon-plus"></i> New Participant</a></li>
+				<li class="nav-item"><a href="#" class="nav-link" id="slide-reward"><i class="icon-gift"></i> Reward</a></li>
 				
 				<li class="nav-item"><a href="<?=Url::to(['/site/logout'])?>" class="nav-link">Log Out</a></li>
 				

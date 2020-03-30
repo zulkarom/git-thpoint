@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use common\models\User;
 
 /**
  * This is the model class for table "customer_reward".
@@ -11,9 +12,8 @@ use Yii;
  * @property int $customer_id
  * @property int $campaign_id
  * @property string $reward_at
- * @property int $reward_type
  * @property int $product_reward_id
- * @property string $cash_value
+ * @property string $point_value
  * @property int $has_claimed
  * @property string $claimed_at
  * @property int $issue_claim_by
@@ -38,13 +38,19 @@ class CustomerReward extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'campaign_id', 'reward_at', 'reward_type', 'product_reward_id', 'cash_value', 'has_claimed', 'claimed_at', 'issue_claim_by'], 'required'],
-            [['customer_id', 'campaign_id', 'reward_type', 'product_reward_id', 'has_claimed', 'issue_claim_by'], 'integer'],
+            [['customer_id', 'campaign_id', 'reward_at', 'point_value'], 'required'],
+			
+			
+            [['customer_id', 'campaign_id', 'product_reward_id', 'has_claimed', 'issue_claim_by'], 'integer'],
+			
             [['reward_at', 'claimed_at'], 'safe'],
-            [['cash_value'], 'number'],
+			
+            [['point_value'], 'number'],
+			
             [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
+			
             [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::className(), 'targetAttribute' => ['customer_id' => 'id']],
-            [['issue_claim_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['issue_claim_by' => 'id']],
+			
         ];
     }
 
@@ -60,7 +66,7 @@ class CustomerReward extends \yii\db\ActiveRecord
             'reward_at' => 'Reward At',
             'reward_type' => 'Reward Type',
             'product_reward_id' => 'Product Reward ID',
-            'cash_value' => 'Cash Value',
+            'point_value' => 'Point Value',
             'has_claimed' => 'Has Claimed',
             'claimed_at' => 'Claimed At',
             'issue_claim_by' => 'Issue Claim By',

@@ -34,6 +34,7 @@ class CampaignParticipant extends \yii\db\ActiveRecord
     {
         return [
             [['campaign_id', 'customer_id', 'joint_at'], 'required'],
+			
             [['campaign_id', 'customer_id'], 'integer'],
             [['joint_at'], 'safe'],
             [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],

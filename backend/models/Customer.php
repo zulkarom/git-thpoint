@@ -32,9 +32,8 @@ class Customer extends \yii\db\ActiveRecord
         return [
             [['customer_name', 'customer_phone', 'created_at', 'created_by'], 'required'],
             [['created_at'], 'safe'],
-            [['created_by'], 'integer'],
+            [['created_by', 'customer_phone'], 'integer'],
             [['customer_name'], 'string', 'max' => 100],
-            [['customer_phone'], 'string', 'max' => 50],
 			[['customer_phone'], 'unique'], 
         ];
     }

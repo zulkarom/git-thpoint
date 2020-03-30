@@ -2,162 +2,152 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\jui\JuiAsset;
 
 $this->title = 'STAFF PAGE';
 
+$campaign_id = '';
+$campaign_name = '';
+if($default){
+	$campaign_id = $default->id;
+	$campaign_name = $default->campaign_name;
+}
+
 ?>
 
-<style>
-    .modal-dialog {
-        width: 100% !important;
-        height: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        max-width:none !important;
-
-    }
-
-    .modal-content {
-        height: auto !important;
-        min-height: 100% !important;
-        border-radius: 0 !important;
-        background-color: #FFFFFF !important;
-    }
-	
-	.modal-header {
-        border-bottom: 1px solid #ffffff !important;
-    }
-
-    .modal-footer {
-        border-top: 1px solid #ffffff !important;
-    }
-
-</style>
 <div class="container">
 
-
-<?php $form = ActiveForm::begin() ?>
-<br />
-
-<?=$form->field($model, 'campaign_id')->dropDownList($model->campaignList())->label('CAMPAIGN')?>
-
-<div class="row">
-<div class="col-md-6">
-<?=$form->field($model, 'product_id')->dropDownList([])->label('PRODUCT')?>
-</div>
-<div class="col-md-1">
-
-<?php 
-if(!$model->point_value){
-	$model->point_value = 1;
-}
-echo $form->field($model, 'point_value')->textInput()->label('Qty')?>
-</div>
-
-<div class="col-md-5">
-<?=$form->field($model, 'customer_phone')->textInput()->label('CUSTOMER ID')?>
-</div>
-
-
-</div>
-
-<button id="modalActivate" type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModalPreview">
-    Graphic Interface
-</button>
-
-<?= Html::submitButton('Submit Point',['class' => 'btn btn-primary '])?>
-
-
-
-	
-
-
-
-<?php ActiveForm::end(); ?>
-
-<br />
-
+<div id="page-point">
 <div class="table-responsive">
   <table class="table table-striped table-hover">
-    <thead>
-      <tr>
-	  <th>#</th>
-        <th>Campaign</th>
-        <th>Customer</th>
-		<th>Current Point</th>
-        <th>Accumulated Points</th>
-		<th>Time</th>
-		<th></th>
-      </tr>
-    </thead>
     <tbody>
-	<?php 
-	
-	if($list){
-		$i = 1;
-		foreach($list as $row){
-			echo '
-			<tr>
-	  <td>'.$i.'. </td>
-		 <td>'.$row->campaign->campaign_name .'</td>
-        <td>'.$row->customer->customer_name .'</td>
-       
-        <td>'.$row->point_value .'</td>
-		 <td>'.$row->accumulatedPoints() .'</td>
-		  <td>'.$row->point_at .'</td>
-		  <td>';
-		  echo Html::a('<i class="icon-trash"></i>',['']);
-		  
-		  echo '</td>
-      </tr>
-			
-			';
-		$i++;
-		}
-	}
-	
-	
-	?>
-      
+      <tr>
+        <td width="35%" align="right">
+		<button id="camToQty" type="button" class="btn btn-danger">
+    C2Q
+</button> 
+		<button id="modalCampaign" type="button" class="btn btn-danger" data-toggle="modal" data-target="#campaignModalPreview">
+    Select Campaign
+</button>
+</td>
 
+        <td>
+		<input type="hidden" id="con-campaign-id" value="<?=$campaign_id?>" />
+		<h4><b id="con-campaign-name"><?=$campaign_name?></b></h4>
+		
+		
+		</td>
+
+      </tr>
+      <tr>
+        <td align="right">
+		<button id="prodToQty" type="button" class="btn btn-info">
+    P2Q
+</button> 
+		<button id="modalProduct" type="button" class="btn btn-info">
+    Select Product
+</button></td>
+        <td>
+		<input type="hidden" id="con-product-id" value="" />
+		<h4><b id="con-product-name"></b></h4>
+		
+		</td>
+      </tr>
+      <tr>
+        <td align="right">
+
+
+<button id="modalQuantity" type="button" class="btn btn-success">
+    Quantity
+</button>
+<input type="hidden" id="qty-focus" value="0" />
+		</td>
+        <td>
+		<input type="hidden" id="con-quantity-id" value="1" />
+		<h4><b id="con-quantity">1</b></h4>
+		
+		</td>
+      </tr>
+	  <tr>
+        <td align="right">
+		<button id="modalPhone" type="button" class="btn btn-warning">
+    Customer ID
+</button>
+		</td>
+        <td>
+		
+
+		
+		<div class="input-group mb-3" style="width:80%">
+  <input type="text" class="form-control"  id="customer_id" onkeypress="return isNumberKey(event)">
+  <div class="input-group-append">
+  
+  <button class="btn btn-outline-success" id="btn-submit" type="button"><i class="icon-save"></i> &nbsp;Submit Point</button>
+  
+
+  </div>
+</div>
+		
+		
+		</td>
+      </tr>
+	  <tr>
+        <td align="right">
+		
+		</td>
+        <td>
+
+		</td>
+      </tr>
     </tbody>
   </table>
 </div>
+
+<div id="result-submit" align="center"></div>
+
+
+</div>
+
+<?=$this->render('page-reward')?>
+
+
+
+
+
+
+
+
+<br />
+
+
 
 <br /><br /><br /><br />
 
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModalPreview" tabindex="-1" role="dialog" aria-labelledby="exampleModalPreviewLabel" aria-hidden="true">
-    <div class="modal-dialog momodel modal-fluid" role="document">
-        <div class="modal-content ">
-            <div class=" modal-header text-center">
-                <h5 class="modal-title w-100" id="exampleModalPreviewLabel">THE POINT</h5>
-                <button  type="button" class="close " data-dismiss="modal" aria-label="Close">
-                    <span style="font-size: 1.3em;" aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                
-                <h1 class="section-heading text-center wow fadeIn my-5 pt-3"> Not for money, but for humanity</h1>
-				<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-md btn-rounded" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary btn-md btn-rounded">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal -->
-
 <?php 
 
-$this->registerJs('
 
-$("#customerpoint-customer_phone").focus();
+echo $this->render('modal-campaign', [
+'campaign' => $campaign
+]);
 
-');
+echo $this->render('modal-product', [
+'campaign' => $campaign
+]);
 
+echo $this->render('modal-quantity', [
+'campaign' => $campaign
+]);
+
+echo $this->render('modal-customer', [
+'campaign' => $campaign
+]);
+
+echo $this->render('modal-register', [
+'campaign' => $campaign
+]);
+
+$this->render('js');
+JuiAsset::register($this);
 ?>

@@ -34,13 +34,13 @@ class CustomerPoint extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['campaign_id', 'customer_id', 'point_at', 'point_value', 'staff_id', 'product_id'], 'required'],
+            [['campaign_id', 'customer_id', 'point_at', 'point_value', 'quantity', 'staff_id', 'product_id', 'sale_value'], 'required'],
 			
-            [['campaign_id', 'customer_id', 'product_id'], 'integer'],
+            [['campaign_id', 'customer_id', 'product_id', 'quantity', 'reward_id', 'staff_id'], 'integer'],
 			
             [['point_at'], 'safe'],
 			
-            [['customer_phone', 'staff_id', 'point_value'], 'number'],
+            [['customer_phone', 'staff_id', 'point_value', 'sale_value', 'reward_point_value'], 'number'],
 			
             [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
             [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::className(), 'targetAttribute' => ['customer_id' => 'id']],

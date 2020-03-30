@@ -22,7 +22,15 @@ use backend\models\Product;
 <?= $form->field($model, 'campaign_name')->textInput() ?>
 <?= $form->field($model, 'reward_type')->dropDownList( $model->typeList() ) ?>
 <?= $form->field($model, 'reward_point_at')->textInput() ?>
-<?= $form->field($model, 'is_active')->dropDownList([1=>'Yes', 0 => 'No'] ) ?>
+
+<div class="row">
+<div class="col-md-6"><?= $form->field($model, 'is_active')->dropDownList([1=>'Yes', 0 => 'No'] ) ?></div>
+
+<div class="col-md-6"><?= $form->field($model, 'is_default')->dropDownList([0 => 'No', 1=>'Yes'] ) ?>
+</div>
+
+</div>
+
 	</div>
 </div>
 	

@@ -33,7 +33,13 @@ $this->params['breadcrumbs'][] = $this->title;
 				}
 				
 			],
-            
+            [
+				'attribute' => 'is_default',
+				'value' => function($model){
+					return $model->is_default == 1 ? 'Yes' : 'No';
+				}
+				
+			],
 
             ['class' => 'yii\grid\ActionColumn',
                  'contentOptions' => ['style' => 'width: 13%'],
