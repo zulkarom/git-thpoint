@@ -143,7 +143,9 @@ class StaffController extends Controller
 				
 				
 				if($quantity > 0){
-					$flag = $this->processPoint($campaign_id, $product_id, $product->product_price, $point->point_value, $customer->id, $quantity);			
+					//return $this->processPoint($campaign_id, $product_id, $product->product_price, $point->point_value, $customer->id, $quantity);
+					$flag = $this->processPoint($campaign_id, $product_id, $product->product_price, $point->point_value, $customer->id, $quantity);
+					
 					
 					if($flag == true){
 						return json_encode([0, $customer->customer_name . ' has got the point.']);
@@ -163,75 +165,77 @@ class StaffController extends Controller
 	}
 	
 	private function processPoint($campaign, $product, $price, $point, $customer, $quantity){
-		// we need to loop thru the quantity
-		//ok current quantity = 15
-		//berapa nak kumpul?
-		//=============cari berapa kena kumpul: 10.1 ======================
-			$campaign_model = Campaign::findOne($campaign);
-			$reward_at = $campaign_model->reward_point_at;
-		//===========================================================
-		//nak cari berapa lg balance untuk dapat next reward
-		//jadi kena cari berapa dah dikumpul
-		
-		
-		
-		$accumulated = CustomerPoint::find()
+		$curr_point = $point * $quantity;
+		$put_point = $this->putPoint($campaign, $product, $price, $point, $customer, $quantity);
+		if($put_point){
+			//check reward
+			
+			$last_point = $put_point;
+			$accumulated = CustomerPoint::find()
 			->where(['campaign_id' => $campaign, 'customer_id' => $customer, 'reward_id' => 0])
 			->sum('point_value * quantity');
-		//so berapa lagi tinggal?
-		$bal_next_reward = $reward_at - $accumulated; //contoh: 1.1
-		$start_count = 1;
-		$point_not_rewarded = 0;
-		$original_accumulated = $accumulated;
-		for($i=1;$i<=$quantity;$i++){
-			//klu tak cukup skip
 			
-			//reset the accumulated
-			$accumulated = $accumulated + $point;
+			//=============cari berapa kena kumpul: 10.1 ======================
+			$campaign_model = Campaign::findOne($campaign);
+			$reward_at = $campaign_model->reward_point_at;
+			//===========================================================
 			
-			if($accumulated >= $reward_at){
-				//klu cukup create point
-				$put_point = $this->putPoint($campaign, $product, $price, $point, $customer, $start_count);
-				//dan juga create reward
-				//kena cari reward point this point
-				//===============================================
-				$reward_this_point = $reward_at - $original_accumulated; // cth: 10.1 - 9 = 1.1
-				//============================================
-				$this->createReward($campaign, $customer, $reward_at, $put_point, $reward_this_point);
-				//reset the count & accumulated
-				$start_count = 0;
-				$accumulated = 0;
-				$original_accumulated = 0;
-				$point_not_rewarded = 0;
-				//ok apa jadi kepada kes baki : cth 2
-			}else{
-				$point_not_rewarded++;
+			if($accumulated >= $reward_at){ // klu dah cukup point atau lebih
+				//put reward
+				for($i=1;$accumulated >= $reward_at;$i++){
+					
+					$balance_point = $accumulated - $reward_at;
+					$reward = new CustomerReward;
+					$reward->campaign_id = $campaign;
+					$reward->customer_id = $customer;
+					$reward->reward_at = new Expression('NOW()');
+					$reward->point_value = $reward_at;
+					
+					if($reward->save()){
+						$this->reward = $this->reward + 1; // get number of reward
+						//===============================================
+						$prev_point = $accumulated - $curr_point; // cth: 9
+						$reward_this_point = $reward_at - $prev_point; // cth: 1.1
+						//============================================
+						$this->updatePreviousPointReward($campaign, $customer, $reward->id, $reward_this_point, $last_point);
+						//add new bal forward cth: 0.9
+						$foward = $accumulated - $reward_at;
+						if($foward){
+							//may to consider burning it!!!!!!!!!!! if less than curr unit point
+							//$last_point = $this->putPoint($campaign, $product, 0, $foward, $customer, 1);
+							
+						}
+						
+						$accumulated = CustomerPoint::find()
+						->where(['campaign_id' => $campaign, 'customer_id' => $customer, 'reward_id' => 0])
+						->sum('point_value * quantity');
+						$curr_point = $foward;
+						
+					}
+					$accumulated = $balance_point;
+				}
+				
 			}
-		$start_count++;
-		}
-		
-		if($point_not_rewarded > 0){
-			$put_point = $this->putPoint($campaign, $product, $price, $point, $customer, $point_not_rewarded);
-		}
-		
-		
-		if($put_point){
 			return true;
 		}else{
 			return false;
 		}
 	}
 	
-	private function createReward($campaign, $customer, $reward_at, $last_point, $reward_this_point){
-		$reward = new CustomerReward;
-		$reward->campaign_id = $campaign;
-		$reward->customer_id = $customer;
-		$reward->reward_at = new Expression('NOW()');
-		$reward->point_value = $reward_at;
-		
-		if($reward->save()){
-			$this->reward = $this->reward + 1; // get number of reward
-			$this->updatePreviousPointReward($campaign, $customer, $reward->id, $reward_this_point, $last_point);
+	private function putPoint($campaign, $product, $price, $point, $customer, $quantity){
+		$model = new CustomerPoint;
+		$model->sale_value = $price;
+		$model->point_value = $point;
+		$model->campaign_id = $campaign;
+		$model->product_id = $product;
+		$model->customer_id = $customer;
+		$model->quantity = $quantity;
+		$model->point_at = new Expression('NOW()');
+		$model->staff_id = Yii::$app->user->identity->id;
+		if($model->save()){
+			return $model->id;
+		}else{
+			return false;
 		}
 	}
 	
@@ -252,27 +256,6 @@ class StaffController extends Controller
 			}
 		}
 	}
-	
-	
-	
-	private function putPoint($campaign, $product, $price, $point, $customer, $quantity){
-		$model = new CustomerPoint;
-		$model->sale_value = $price;
-		$model->point_value = $point;
-		$model->campaign_id = $campaign;
-		$model->product_id = $product;
-		$model->customer_id = $customer;
-		$model->quantity = $quantity;
-		$model->point_at = new Expression('NOW()');
-		$model->staff_id = Yii::$app->user->identity->id;
-		if($model->save()){
-			return $model->id;
-		}else{
-			return false;
-		}
-	}
-	
-	
 	
 	public function actionCreateCustomer(){
 		

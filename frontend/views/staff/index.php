@@ -130,17 +130,12 @@ echo $this->render('modal-product', [
 'campaign' => $campaign
 ]);
 
-echo $this->render('modal-quantity', [
-'campaign' => $campaign
-]);
+echo $this->render('modal-quantity');
+echo $this->render('modal-customer');
+echo $this->render('modal-register');
 
-echo $this->render('modal-customer', [
-'campaign' => $campaign
-]);
-
-echo $this->render('modal-register', [
-'campaign' => $campaign
-]);
+echo $this->render('modal-reward');
+echo $this->render('modal-reward-product');
 
 $this->render('js');
 $this->render('jsReward');

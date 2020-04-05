@@ -45,7 +45,7 @@ class CustomerReward extends \yii\db\ActiveRecord
 			
             [['reward_at', 'claimed_at'], 'safe'],
 			
-            [['point_value'], 'number'],
+            [['point_value', 'reward_sale_value'], 'number'],
 			
             [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
 			
@@ -96,4 +96,10 @@ class CustomerReward extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'issue_claim_by']);
     }
+	
+	public function getCustomerPoints()
+    {
+        return $this->hasMany(CustomerPoint::className(), ['reward_id' => 'id']);
+    }
+
 }

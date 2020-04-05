@@ -70,4 +70,9 @@ class CampaignRewardProduct extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Product::className(), ['id' => 'product_id']);
     }
+	
+	public function getProductAndPrice(){
+		$product = $this->product;
+		return $product->product_name . ' (RM'.$product_price.')';
+	}
 }
