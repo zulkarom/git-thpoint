@@ -88,4 +88,9 @@ class CustomerPoint extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Customer::className(), ['id' => 'customer_id']);
     }
+	
+	public function getProduct()
+    {
+        return $this->hasOne(Product::className(), ['id' => 'product_id']);
+    }
 }

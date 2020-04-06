@@ -305,17 +305,14 @@ class StaffController extends Controller
 				$reward = CustomerReward::find()
 				->where(['customer_id' => $customer->id, 'has_claimed' => 0])
 				->orderBy('id ASC')
-				->all()
-				;
+				->all();
 				if($reward){
-					$rwd = ArrayHelper::map($reward, 'id', 'campaign.campaign_name');
-					$points = ArrayHelper::toArray($reward[0]->customerPoints);
-					$campaign = $reward[0]->campaign;
-					$first_campaign = $campaign->campaign_name;
+					$list_reward = ArrayHelper::map($reward, 'id', 'campaign.campaign_name');
 					
-					$list_reward = ArrayHelper::map($campaign->rewardProducts, 'product_id', 'productAndPrice');
+					list($points, $products) = $this->pointsAndProducts($reward[0]);
 					
-					return json_encode([0, $customer->customer_name, $rwd, $list_reward, $points]);
+					return json_encode([0, $customer->customer_name, $list_reward, $products, $points]);
+					
 				}else{
 					return json_encode([2 ,  'No reward as yet for ' . $customer->customer_name]);
 				}
@@ -323,6 +320,45 @@ class StaffController extends Controller
 				return json_encode([1 ,  'Customer not found']);
 			}
 		}
+	}
+	
+	public function actionProductReward(){
+		if(Yii::$app->request->post()){
+			$id = Yii::$app->request->post('reward');
+			//so apa kita nak sekrang list point
+			//dgn list product
+			$reward = CustomerReward::findOne($id);
+			list($points, $products) = $this->pointsAndProducts($reward);
+			return json_encode([$products, $points]);
+		} 
+	}
+	
+	public function actionIssueReward(){
+		if(Yii::$app->request->post()){
+			$reward = Yii::$app->request->post('reward');
+			$product = Yii::$app->request->post('product');
+			$model = CustomerReward::findOne($reward);
+			$model->product_reward_id = $product;
+			$model->has_claimed = 1;
+			$model->claimed_at = new Expression('NOW()');
+			$model->issue_claim_by = Yii::$app->user->identity->id;
+			$price = Product::findOne($product)->product_price;
+			$model->reward_sale_value = $price;
+			if($model->save()){
+				return json_encode([0, 'Everything is good']);
+			}else{
+				return json_encode([1, 'Failed to issue reward']);
+			}
+		}
+	}
+	
+	private function pointsAndProducts($reward){
+		$points = ArrayHelper::toArray($reward->customerPointDetails);
+		//return $avg_sale;
+		$avg_sale = $points[1][0];
+		$campaign = $reward->campaign;
+		$list_product = ArrayHelper::map($campaign->rewardProductsAverage($avg_sale), 'product_id', 'productAndPrice');
+		return [$points, $list_product];
 	}
 	
 	

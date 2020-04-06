@@ -30,13 +30,13 @@
 	  <tr>
         <td align="right">		
 		<button id="modalReward" type="button" class="btn btn-danger">
-    Select Reward
+    Select Reward Campaign
 </button>
 		
 		</td>
         <td>
-
-
+<input type="hidden" id="con-reward-selected-id" value="" />
+<h4><b id="con-reward-selected"></b></h4>
 		
 		
 		</td>
@@ -44,13 +44,13 @@
 	  <tr>
         <td align="right">
 		<button id="modalProductReward" type="button" class="btn btn-info">
-    Select Product
+    Select Reward Product
 </button>
 		
 		</td>
         <td>
-
-
+<input type="hidden" id="con-prod-reward-selected-id" value="" />
+<h4><b id="con-prod-reward-selected"></b></h4>
 		
 		
 		</td>
@@ -61,7 +61,7 @@
 		
 		</td>
         <td>
-		<button id="btn-submit" type="button" class="btn btn-success">
+		<button id="btn-issue-reward" type="button" class="btn btn-success">
     <i class="icon-gift"></i> Issue Reward
 </button>
 
@@ -75,7 +75,7 @@
   </table>
 </div>
 
-<div id="result-submit" align="center"></div>
+<div id="issue-result" align="center"></div>
 
 
 </div>

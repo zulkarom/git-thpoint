@@ -20,23 +20,21 @@
       <tr>
 	  <th>Date</th>
         <th>Product</th>
-        <th>Point</th>
-        <th>Qty</th>
-		<th>Total</th>
-		<th>RM</th>
+		<th>Qty</th>
+		<th>Point</th>
+		
+        
+		<th>Sales</th>
       </tr>
     </thead>
-    <tbody>
-      <tr>
-	  <td>20 Mar 2020</td>
-        <td> Hot Chocolate (RM10.20)</td>
-        <td>1</td>
-        <td>2</td>
-		 <td>2</td>
-		 <td>20.40</td>
-      </tr>
+    <tbody id="con-table-points">
+      
       
     </tbody>
+	<tfoot>
+	<tr><td colspan="2" align="right"><b>Total</b></td><td id="con-total-qty"></td><td id="con-total-point"></td><td>RM<span id="con-total-sale"></span></td></tr>
+	<tr><td colspan="4" align="right"><b>Average</b></td><td>RM<span id="con-avg-sale"></span></td></tr>
+	</tfoot>
   </table>
 </div>
 
@@ -57,6 +55,7 @@
             <div class="modal-footer">
 			<span  style="margin: 0 auto">
 	
+	<button type="button" class="btn btn-danger btn-md btn-rounded" id="btn-reward-back" style="height:50px">BACK TO CAMPAIGN REWARD</button>
 			
                <button type="button" class="btn btn-warning btn-md btn-rounded" data-dismiss="modal" style="height:50px">ClOSE</button>
 			   </span>

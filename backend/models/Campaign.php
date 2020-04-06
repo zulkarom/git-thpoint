@@ -74,7 +74,17 @@ class Campaign extends \yii\db\ActiveRecord
 	
 	public function getRewardProducts()
     {
-        return $this->hasMany(CampaignRewardProduct::className(), ['campaign_id' => 'id']);
+        return $this->hasMany(CampaignRewardProduct::className(), ['campaign_id' => 'id'])->orderBy('product_order ASC');
+    }
+	
+	public function rewardProductsAverage($avg)
+    {
+		return CampaignRewardProduct::find()
+		->joinWith(['product'])
+		->where(['cam_prod_reward.campaign_id' => $this->id])
+		->andWhere(['<=', 'product.product_price', $avg])
+		->orderBy('cam_prod_reward.product_order ASC')
+		->all();
     }
 	
 	public function typeList(){

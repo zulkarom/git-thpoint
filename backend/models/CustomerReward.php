@@ -101,5 +101,36 @@ class CustomerReward extends \yii\db\ActiveRecord
     {
         return $this->hasMany(CustomerPoint::className(), ['reward_id' => 'id']);
     }
+	
+	public function getCustomerPointDetails(){
+		//kita nak date, Product & price,	Point,	Qty, 
+		$points = $this->customerPoints;
+		$list = array();
+		$sale = 0;
+		$count_qty = 0;
+		$tpoint = 0;
+		if($points){
+			foreach($points as $point){
+				$qty = $point->quantity;
+				$count_qty += $qty;
+				$price = $point->product->product_price;
+				$sale += $qty * $price;
+				$item = [];
+				$item[] = $point->product->product_name;
+				$item[] = $price;
+				$item[] = date('d M Y', strtotime($point->point_at));
+				$rwd_point = $point->reward_point_value;
+				$item[] = $rwd_point;
+				$tpoint += $rwd_point;
+				$item[] = $qty;
+				$item[] = number_format($qty * $price, 2);
+				$list[] = $item;
+			}
+		}
+		$avg_sale = number_format($sale / $count_qty, 2);
+		$total = [$avg_sale, $tpoint, $count_qty, number_format($sale,2)];
+		
+		return [$list, $total];
+	}
 
 }
