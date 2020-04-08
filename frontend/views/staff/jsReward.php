@@ -54,7 +54,7 @@ function issueReward(){
 	$("#search-result").html('Loading...');
 	$.ajax({
 	url: "<?=Url::to(['/staff/issue-reward'])?>", 
-	timeout: 5000,     // timeout milliseconds
+	//timeout: 5000,     // timeout milliseconds
 	type: 'POST',  // http method
     data: { 
 		reward: $("#con-reward-selected-id").val(),
@@ -106,7 +106,7 @@ function search(){
 	$("#search-result").html('Searching...');
 	$('#issue-result').html('');
 	$.ajax({url: "<?=Url::to(['/staff/search-reward'])?>", 
-	timeout: 5000,     // timeout milliseconds
+	//timeout: 5000,     // timeout milliseconds
 	type: 'POST',  // http method
     data: { 
 		phone: $("#reward_customer_id").val(),
@@ -194,7 +194,7 @@ function emptyProductContainer(loading){
 function switchReward(reward){
 	$.ajax({
 	url: "<?=Url::to(['/staff/product-reward'])?>", 
-	timeout: 5000,     // timeout milliseconds
+	//timeout: 5000,     // timeout milliseconds
 	type: 'POST',  // http method
     data: { 
 		reward: reward,
@@ -268,7 +268,7 @@ function putPointsProductReward(products, points){
 function undoReward(reward){
 	$("#issue-result").html('Processing...');
 	$.ajax({url: "<?=Url::to(['/staff/undo-reward'])?>", 
-	timeout: 5000,     // timeout milliseconds
+	//timeout: 5000,     // timeout milliseconds
 	type: 'POST',  // http method
     data: { 
 		reward: reward,

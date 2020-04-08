@@ -245,7 +245,7 @@ function ajaxSubmit(){
 	$("#result-submit").html('Processing...');
 	
 	$.ajax({url: "<?=Url::to(['/staff/submit-form'])?>", 
-	timeout: 5000,     // timeout milliseconds
+	//timeout: 5000,     // timeout milliseconds
 	type: 'POST',  // http method
     data: { 
 		campaign: $("#con-campaign-id").val(),
@@ -289,7 +289,7 @@ function ajaxSubmit(){
 function undoPoints(points, rewards){
 	$('#result-submit').html('Processing...');
 	$.ajax({url: "<?=Url::to(['/staff/undo-points'])?>", 
-	timeout: 5000,     // timeout milliseconds
+	//timeout: 5000,     // timeout milliseconds
 	type: 'POST',  // http method
     data: { 
 		points: points,
@@ -312,7 +312,7 @@ function undoPoints(points, rewards){
 
 function register(){
 	$.ajax({url: "<?=Url::to(['/staff/create-customer'])?>", 
-	timeout: 5000,     // timeout milliseconds
+	//timeout: 5000,     // timeout milliseconds
 	type: 'POST',  // http method
     data: { 
 		name: $("#con-register").val(),
