@@ -14,6 +14,8 @@ nbproject
 .project
 .settings
 
+.cpanel.yml
+
 # windows thumbnail cache
 Thumbs.db
 
@@ -30,6 +32,8 @@ composer.phar
 phpunit.phar
 # local phpunit config
 /phpunit.xml
+
+/cpanel.xml
 
 # vagrant runtime
 /.vagrant

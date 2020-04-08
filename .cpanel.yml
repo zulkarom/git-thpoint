@@ -1,5 +1,0 @@
----
-deployment:
- tasks:
- - export DEPLOYPATH=/home/forclcom/mahathir/
- - /bin/cp -R /home/forclcom/repositories/git-thpoint $DEPLOYPATH
