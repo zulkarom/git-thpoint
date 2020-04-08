@@ -1,5 +1,5 @@
 ---
 deployment:
  tasks:
- - export DEPLOYPATH=/home/pusatkoumkedu/efasi/
- - /bin/cp -R /home/pusatkoumkedu/repositories/pro05 $DEPLOYPATH
+ - export DEPLOYPATH=/home/forclcom/mahathir/
+ - /bin/cp -R /home/forclcom/repositories/git-thpoint $DEPLOYPATH
