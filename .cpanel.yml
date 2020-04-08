@@ -1,0 +1,5 @@
+---
+deployment:
+ tasks:
+ - export DEPLOYPATH=/home/forclcom/myapp/
+ - /bin/cp -R /home/forclcom/repositories/git-thpoint $DEPLOYPATH
