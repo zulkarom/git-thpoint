@@ -21,7 +21,9 @@ use yii\helpers\ArrayHelper;
 class StaffController extends Controller
 {
 	public $layout = 'website';
-	public $reward = 0;
+	public $curr_point = 0;
+	public $arrPoint = array();
+	public $arrReward = array();
     /**
      * @inheritdoc
      */
@@ -146,7 +148,23 @@ class StaffController extends Controller
 					$flag = $this->processPoint($campaign_id, $product_id, $product->product_price, $point->point_value, $customer->id, $quantity);			
 					
 					if($flag == true){
-						return json_encode([0, $customer->customer_name . ' has got the point.']);
+						$rwd = CustomerReward::find()
+						->where(['customer_id' => $customer->id, 'has_claimed' => 0])
+						->count();
+						$acc = CustomerPoint::find()
+						->where(['campaign_id' => $campaign_id, 'customer_id' => $customer->id, 'reward_id' => 0])
+						->sum('point_value * quantity');
+						$acc = $acc ? $acc : 0;
+						$cur_point = $this->curr_point;
+						$point_text = $cur_point == 1 ? 'point' : 'points';
+						
+						$point_created = json_encode($this->arrPoint);
+						$reward_created = json_encode($this->arrReward);
+						
+						$msg = $customer->customer_name . ' has got '.$cur_point.' '.$point_text.'.<br />
+						Accumulated Points ('.$acc.') ; Rewards ('.$rwd.') <br />
+						<button class="btn btn-default" value="" id="btn-undo" points="'.$point_created.'" rewards="'.$reward_created.'">Undo</button>';
+						return json_encode([0, $msg]);
 					}else{
 						return json_encode([4, $error[4]]);
 					}
@@ -230,7 +248,7 @@ class StaffController extends Controller
 		$reward->point_value = $reward_at;
 		
 		if($reward->save()){
-			$this->reward = $this->reward + 1; // get number of reward
+			$this->arrReward[] = $reward->id;
 			$this->updatePreviousPointReward($campaign, $customer, $reward->id, $reward_this_point, $last_point);
 		}
 	}
@@ -259,6 +277,7 @@ class StaffController extends Controller
 		$model = new CustomerPoint;
 		$model->sale_value = $price;
 		$model->point_value = $point;
+		$this->curr_point = $this->curr_point + ($point * $quantity);
 		$model->campaign_id = $campaign;
 		$model->product_id = $product;
 		$model->customer_id = $customer;
@@ -266,6 +285,7 @@ class StaffController extends Controller
 		$model->point_at = new Expression('NOW()');
 		$model->staff_id = Yii::$app->user->identity->id;
 		if($model->save()){
+			$this->arrPoint[] = $model->id;
 			return $model->id;
 		}else{
 			return false;
@@ -345,10 +365,45 @@ class StaffController extends Controller
 			$price = Product::findOne($product)->product_price;
 			$model->reward_sale_value = $price;
 			if($model->save()){
-				return json_encode([0, 'Everything is good']);
+				$reward = CustomerReward::find()
+				->where(['customer_id' => $model->customer_id, 'has_claimed' => 0])
+				->count();
+				$msg = 'The reward has been successfully issued. <br />
+				Balance reward ('.$reward.')<br />
+				<button class="btn btn-default" value="'.$model->id .'" id="btn-undo-reward">Undo</button>';
+				return json_encode([0, $msg]);
 			}else{
 				return json_encode([1, 'Failed to issue reward']);
 			}
+		}
+	}
+	
+	public function actionUndoPoints(){
+		if(Yii::$app->request->post()){
+			$rewards = json_decode(Yii::$app->request->post('rewards'));
+			$points = json_decode(Yii::$app->request->post('points'));
+			if($rewards){
+				CustomerReward::deleteAll(['id' => $rewards]);
+			}
+			if($points){
+				CustomerPoint::deleteAll(['id' => $points]);
+			}
+			return 1;
+		}
+	}
+	
+	public function actionUndoReward(){
+		if(Yii::$app->request->post()){
+			$reward = json_decode(Yii::$app->request->post('reward'));
+			$model = CustomerReward::findOne($reward);
+			$model->has_claimed = 0;
+			$model->issue_claim_by = 0;
+			$model->reward_sale_value = 0;
+			$model->product_reward_id = 0;
+			if($model->save()){
+				return 1;
+			}
+			
 		}
 	}
 	

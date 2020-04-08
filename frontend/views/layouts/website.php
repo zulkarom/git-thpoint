@@ -47,7 +47,7 @@ $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@frontend/views/weba
 			if (Yii::$app->user->isGuest) {
 				?>
 				<li class="nav-item"><a href="<?=Url::to(['/site/index'])?>" class="nav-link pl-0">Home</a></li>
-	        	<li class="nav-item"><a href="<?=Url::to(['/site/course'])?>" class="nav-link">My Point</a></li>
+	        	<li class="nav-item"><a href="<?=Url::to(['/site/mypoint'])?>" class="nav-link">My Point</a></li>
 				
 				<li class="nav-item"><a href="<?=Url::to(['/staff/index'])?>" class="nav-link">Staff</a></li>
 				

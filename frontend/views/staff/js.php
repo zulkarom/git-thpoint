@@ -61,9 +61,14 @@ $(".item-qty-express").click(function(){
 
 $("#calc-confirm").click(function(){
 	var val = $("#con-calc").val();
-	$("#con-quantity").text(val);
-	$("#con-quantity-id").val(val);
-	
+	if(val == 0 || val == '0'){
+		$("#con-quantity").text(1);
+		$("#con-quantity-id").val(1);
+	}else{
+		val = parseInt(val);
+		$("#con-quantity").text(val);
+		$("#con-quantity-id").val(val);
+	}
 	closeQtyModal();
 });
 
@@ -82,6 +87,13 @@ $("#calc-clear").click(function(){
 
 $("#phone-clear").click(function(){
 	$("#con-phone").val('');
+	$("#con-phone").focus();
+});
+
+$("#phone-clear-one").click(function(){
+	var phone = $("#con-phone").val();
+	var result = phone.slice(0,-1);
+	$("#con-phone").val(result);
 	$("#con-phone").focus();
 });
 
@@ -151,10 +163,12 @@ $("#slide-reward").click(function(){
 	$("#page-point").hide();
 	 $("#page-reward").show("slide", { direction: "right" }, 200);
 	 $("#reward_customer_id").focus();
+	 $("#result-submit").html('');
 });
 $("#slide-point").click(function(){
 	$("#page-reward").hide();
 	$("#page-point").show("slide", { direction: "left" }, 200);
+	$('#issue-result').html('');
 });
 
 function showPhoneModal(){
@@ -177,6 +191,7 @@ function showPhoneModal(){
 
 function submitForm(){
 	var customer = $("#customer_id").val();
+	$("#reward_customer_id").val(customer);
 	var prod = $("#con-product-id").val();
 	if(customer && prod){
 		ajaxSubmit();
@@ -244,8 +259,15 @@ function ajaxSubmit(){
 		if(res){
 			if(res[0] == 0){
 				$("#result-submit").html('Yeah! ' + res[1]);
+				$("#con-quantity").text(1);
+				$("#con-quantity-id").val(1);
 				$("#customer_id").val('');
 				$("#customer_id").focus();
+				$("#btn-undo").click(function(){
+					var points = $(this).attr('points');
+					var rewards = $(this).attr('rewards');
+					undoPoints(points, rewards);
+				});
 			}else if(res[0] == 1){
 				openRegister();
 			}else{
@@ -257,7 +279,31 @@ function ajaxSubmit(){
 		
 	},
 	error: function (jqXhr, textStatus, errorMessage) { // error callback 
-        $('#result-submit').append('Error: ' + errorMessage);
+        $('#result-submit').html('Error: ' + errorMessage);
+    }
+  
+  
+  });
+}
+
+function undoPoints(points, rewards){
+	$('#result-submit').html('Processing...');
+	$.ajax({url: "<?=Url::to(['/staff/undo-points'])?>", 
+	timeout: 5000,     // timeout milliseconds
+	type: 'POST',  // http method
+    data: { 
+		points: points,
+		rewards: rewards,
+	},
+	success: function(result){
+
+		if(result == 1){
+			$('#result-submit').html('The action has been undone.');
+		}
+		
+	},
+	error: function (jqXhr, textStatus, errorMessage) { // error callback 
+       $('#result-submit').html('Error: ' + errorMessage);
     }
   
   

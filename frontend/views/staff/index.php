@@ -33,7 +33,7 @@ if($default){
 
         <td>
 		<input type="hidden" id="con-campaign-id" value="<?=$campaign_id?>" />
-		<h4><b id="con-campaign-name"><?=$campaign_name?></b></h4>
+		<h5><b id="con-campaign-name"><?=$campaign_name?></b></h5>
 		
 		
 		</td>
@@ -49,7 +49,7 @@ if($default){
 </button></td>
         <td>
 		<input type="hidden" id="con-product-id" value="" />
-		<h4><b id="con-product-name"></b></h4>
+		<h5><b id="con-product-name"></b></h5>
 		
 		</td>
       </tr>
@@ -64,7 +64,7 @@ if($default){
 		</td>
         <td>
 		<input type="hidden" id="con-quantity-id" value="1" />
-		<h4><b id="con-quantity">1</b></h4>
+		<h5><b id="con-quantity">1</b></h5>
 		
 		</td>
       </tr>

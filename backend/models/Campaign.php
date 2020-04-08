@@ -101,4 +101,90 @@ class Campaign extends \yii\db\ActiveRecord
 		$arr = $this->typeList();
 		return $arr[$this->reward_type];
 	}
+	
+	public function pointsByCustomer($customer){
+		return CustomerPoint::find()->where(['campaign_id' => $this->id, 'customer_id' => $customer, 'reward_id' => 0])->sum('point_value * quantity');
+	}
+	
+	public function getSaleToday(){
+		return CustomerPoint::find()
+		->where([
+			'campaign_id' => $this->id, 
+			'reward_id' => 0,
+			])
+		->andWhere('point_at >= CURDATE()')
+		->sum('sale_value * quantity');
+	}
+	
+	public function getSaleMonth(){
+		return CustomerPoint::find()
+		->where([
+			'campaign_id' => $this->id, 
+			'reward_id' => 0,
+			])
+		->andWhere('MONTH(point_at) = MONTH(CURRENT_DATE())')
+		->sum('sale_value * quantity');
+	}
+	
+	public function getPointToday(){
+		return CustomerPoint::find()
+		->where([
+			'campaign_id' => $this->id, 
+			'reward_id' => 0,
+			])
+		->andWhere('point_at >= CURDATE()')
+		->sum('point_value * quantity');
+	}
+	
+	public function getPointMonth(){
+		return CustomerPoint::find()
+		->where([
+			'campaign_id' => $this->id, 
+			'reward_id' => 0,
+			])
+		->andWhere('MONTH(point_at) = MONTH(CURRENT_DATE())')
+		->sum('point_value * quantity');
+	}
+	
+	
+	
+	public function getRewardToday(){
+		return CustomerReward::find()
+		->where([
+			'campaign_id' => $this->id, 
+			'has_claimed' => 1,
+			])
+		->andWhere('reward_at >= CURDATE()')
+		->sum('reward_sale_value');
+	}
+	
+	public function getRewardMonth(){
+		return CustomerReward::find()
+		->where([
+			'campaign_id' => $this->id, 
+			'has_claimed' => 1,
+			])
+		->andWhere('MONTH(reward_at) = MONTH(CURRENT_DATE())')
+		->sum('reward_sale_value');
+	}
+	
+	public function getClaimedRewardToday(){
+		return CustomerReward::find()
+		->where([
+			'campaign_id' => $this->id, 
+			'has_claimed' => 1,
+			])
+		->andWhere('reward_at >= CURDATE()')
+		->count();
+	}
+	
+	public function getClaimedRewardMonth(){
+		return CustomerReward::find()
+		->where([
+			'campaign_id' => $this->id, 
+			'has_claimed' => 1,
+			])
+		->andWhere('MONTH(reward_at) = MONTH(CURRENT_DATE())')
+		->count();
+	}
 }

@@ -7,14 +7,9 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\LoginForm;
 use common\models\User;
-use backend\models\UserToken;
-use frontend\models\PasswordResetRequestForm;
-use frontend\models\ResetPasswordForm;
-use frontend\models\SignupForm;
-use frontend\models\ContactForm;
-use frontend\models\CourseSearch;
+use frontend\models\PointForm;
+use backend\models\Customer;
 use yii\web\ForbiddenHttpException;
 
 /**
@@ -22,6 +17,7 @@ use yii\web\ForbiddenHttpException;
  */
 class SiteController extends Controller
 {
+	public $layout = 'website';
 
     /**
      * Displays homepage.
@@ -30,22 +26,9 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-		$this->layout = 'website';
         return $this->render('index');
     }
 	
-	public function actionCourse(){
-		$this->layout = 'website';
-		$searchModel = new CourseSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('course', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-	}
-	
-
 
     /**
      * Logs in a user.
@@ -70,36 +53,7 @@ class SiteController extends Controller
         }
     }
 	
-	/**
-     * Logs in a user.
-     *
-     * @return mixed
-     */
-    public function actionFasiLogin($id, $token)
-    {
-		if (!Yii::$app->user->isGuest) {
-            Yii::$app->user->logout();
-        }
-		
-		$last5 = time() - (60);
-		
-		$db = UserToken::find()
-		->where(['user_id' => $id, 'token' => $token])
-		->andWhere('created_at > ' . $last5)
-		->one();
-		
-		if($db){
-		   $user = User::findIdentity($id);
-			if(Yii::$app->user->login($user)){
-				return $this->redirect(['dashboard/index']);
-			}
-		}else{
-			throw new ForbiddenHttpException;
-		}
-		
-       
-		
-    }
+
 
     /**
      * Logs out the current user.
@@ -145,75 +99,43 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
-
-    /**
-     * Signs user up.
-     *
-     * @return mixed
-     */
-    public function actionSignup()
+	
+	public function actionMypoint($phone = null)
     {
-        $model = new SignupForm();
-        if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
-				Yii::$app->session->addFlash('success', "Registration Successful");
-               return $this->redirect(['site/login']);
-            }
-        }
+		$model = new PointForm();
 		
-		$this->layout = "//main-login";
-
-        return $this->render('signup', [
-            'model' => $model,
-        ]);
+		if ($model->load(Yii::$app->request->post())){
+			$phone = $model->phone;
+			return $this->redirect(['site/mypoint', 'phone' => $phone]);
+		}
+		
+        if ($phone) {
+			$customer = Customer::findOne(['customer_phone' => $phone]);
+			if(!$customer){
+				Yii::$app->session->setFlash('error', 'Customer not found');
+				return $this->redirect(['mypoint']);
+			}
+            return $this->render('show-point', [
+                'model' => $model,
+				'customer' => $customer
+            ]);
+			
+        } else {
+			
+            return $this->render('mypoint', [
+                'model' => $model,
+            ]);
+        }
     }
-
-    /**
-     * Requests password reset.
-     *
-     * @return mixed
-     */
-    public function actionRequestPasswordReset()
+	
+	protected function findCustomer($phone)
     {
-        $model = new PasswordResetRequestForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
-
-                return $this->goHome();
-            } else {
-                Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for the provided email address.');
-            }
+        if (($model = Customer::findOne($phone)) !== null) {
+            return $model;
         }
 
-        return $this->render('requestPasswordResetToken', [
-            'model' => $model,
-        ]);
+        throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    /**
-     * Resets password.
-     *
-     * @param string $token
-     * @return mixed
-     * @throws BadRequestHttpException
-     */
-    public function actionResetPassword($token)
-    {
-        try {
-            $model = new ResetPasswordForm($token);
-        } catch (InvalidParamException $e) {
-            throw new BadRequestHttpException($e->getMessage());
-        }
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->session->setFlash('success', 'New password saved.');
-
-            return $this->goHome();
-        }
-
-        return $this->render('resetPassword', [
-            'model' => $model,
-        ]);
-    }
 }

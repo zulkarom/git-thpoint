@@ -69,6 +69,10 @@ function issueReward(){
 				$("#issue-result").html(res[1]);
 				$("#search-result").html('');
 				emptyEverything();
+				$("#btn-undo-reward").click(function(){
+					var reward = $(this).attr('value');
+					undoReward(reward);
+				});
 			}else{
 				$("#issue-result").html(res[1]);
 			}
@@ -100,6 +104,7 @@ function initSearch(){
 
 function search(){
 	$("#search-result").html('Searching...');
+	$('#issue-result').html('');
 	$.ajax({url: "<?=Url::to(['/staff/search-reward'])?>", 
 	timeout: 5000,     // timeout milliseconds
 	type: 'POST',  // http method
@@ -143,9 +148,9 @@ function search(){
 				$("#con-reward-selected").text(text);
 				
 				//empty
-				
-				$("#rewardProductModalPreview").modal("show");
 				$("#rewardModalPreview").modal("hide");
+				$("#rewardProductModalPreview").modal("show");
+				
 				
 			});
 	
@@ -258,6 +263,29 @@ function putPointsProductReward(products, points){
 		$("#con-prod-reward-selected").text(text);
 		$("#rewardProductModalPreview").modal("hide");
 	});
+}
+
+function undoReward(reward){
+	$("#issue-result").html('Processing...');
+	$.ajax({url: "<?=Url::to(['/staff/undo-reward'])?>", 
+	timeout: 5000,     // timeout milliseconds
+	type: 'POST',  // http method
+    data: { 
+		reward: reward,
+	},
+	success: function(result){
+
+		if(result == 1){
+			$('#issue-result').html('The action has been undone.');
+		}
+		
+	},
+	error: function (jqXhr, textStatus, errorMessage) { // error callback 
+      $("#issue-result").html('Error: ' + errorMessage);
+    }
+  
+  
+  });
 }
 
 </script>

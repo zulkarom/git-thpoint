@@ -56,5 +56,18 @@ class Customer extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'created_by']);
     }
+	
+	public function getUnclaimedRewards()
+    {
+        return $this->hasMany(CustomerReward::className(), ['customer_id' => 'id'])->where(['has_claimed' => 0]);
+    }
+	
+	public function getUniqueCampaignPoint(){
+		return CustomerPoint::find()
+		->select('distinct(campaign_id)')
+		->where(['customer_id' => $this->id, 'reward_id' => 0])
+		->all();
+	}
+
 
 }

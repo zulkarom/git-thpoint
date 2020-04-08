@@ -15,7 +15,7 @@
 <div class="col-md-5">
 <b>Details of point earned</b>
 <div class="table-responsive">
-  <table class="table table-striped table-hover" style="font-size:12px;">
+  <table class="table table-striped table-hover mytable" style="font-size:12px;">
     <thead>
       <tr>
 	  <th>Date</th>

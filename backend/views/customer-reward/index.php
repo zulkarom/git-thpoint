@@ -23,7 +23,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'customer.customer_name',
             'campaign.campaign_name',
             'reward_at',
-            'reward_type',
             //'product_reward_id',
             //'cash_value',
             //'has_claimed',

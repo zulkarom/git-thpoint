@@ -39,7 +39,7 @@ use dmstr\widgets\Alert;
     <div class="pull-right hidden-xs">
         <b>Version</b> 2.0
     </div>
-    Copyright &copy; 2018 <a href="#">Loyalty</a>. All rights
+    Copyright &copy; 2020 <a href="#">The Point</a>. All rights
     reserved.
 </footer>
 

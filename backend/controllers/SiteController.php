@@ -6,8 +6,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
-use backend\models\SemesterForm;
-use backend\models\Semester;
+use backend\models\Campaign;
 
 /**
  * Site controller
@@ -63,9 +62,9 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-		
+		$campaigns = Campaign::find()->where(['is_active' => 1])->all();
         return $this->render('index', [
-		
+		'campaigns' => $campaigns
 		]);
     }
 

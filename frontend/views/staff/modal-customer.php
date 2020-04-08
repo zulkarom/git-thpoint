@@ -68,7 +68,7 @@
 
 
 
-<button type="button" id="phone-clear" class="btn btn-warning btn-md btn-rounded" style="width:90px;height:'.$size.'px">CLEAR</button>
+<button type="button" id="phone-clear-one" class="btn btn-warning btn-md btn-rounded" style="width:90px;height:'.$size.'px">CLEAR</button>
 <br />
 <button class="btn btn-success btn-lg item-phone" value="4" style="font-size:22px;height:<?=$size?>px;width:<?=$size?>px;margin:10px"><b> 4 </b> </button>
 
@@ -76,8 +76,8 @@
 
 <button class="btn btn-success btn-lg item-phone" value="6" style="font-size:22px;height:<?=$size?>px;width:<?=$size?>px;margin:10px"><b> 6 </b> </button>
 			
-			
-<button type="button" id="phone-confirm" class="btn btn-danger btn-md btn-rounded" style="width:90px;height:<?=$size?>px">OK</button>
+<button type="button" id="phone-clear" class="btn btn-warning btn-md btn-rounded" style="width:90px;height:'.$size.'px">CLEAR ALL</button>			
+
 
 <br />
 <button class="btn btn-success btn-lg item-phone" value="7" style="font-size:22px;height:<?=$size?>px;width:<?=$size?>px;margin:10px"><b> 7 </b> </button>
@@ -85,6 +85,8 @@
 <button class="btn btn-success btn-lg item-phone" value="8" style="font-size:22px;height:<?=$size?>px;width:<?=$size?>px;margin:10px"><b> 8 </b> </button>
 
 <button class="btn btn-success btn-lg item-phone" value="9" style="font-size:22px;height:<?=$size?>px;width:<?=$size?>px;margin:10px"><b> 9 </b> </button>
+
+<button type="button" id="phone-confirm" class="btn btn-danger btn-md btn-rounded" style="width:90px;height:<?=$size?>px">OK</button>
 
 
 <br />

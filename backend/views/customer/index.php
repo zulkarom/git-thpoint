@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a('<span class="fa fa-trash"></span>', ['delete', 'id' => $model->id], [
                             'class' => 'btn btn-danger btn-sm',
                             'data' => [
-                                'confirm' => 'Are you sure you want to delete this product?',
+                                'confirm' => 'Are you sure you want to delete this customer?',
                                 'method' => 'post',
                             ],
                         ]) ;
