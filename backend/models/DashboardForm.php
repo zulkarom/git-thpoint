@@ -187,5 +187,15 @@ class DashboardForm extends Model
 		return $list;
 		
 	}
+	
+	public function getSaleToday(){
+		$result = CustomerPoint::find()
+		->where([
+			'campaign_id' => $this->campaign, 
+			])
+		->andWhere('point_at >= CURDATE()')
+		->sum('sale_value * quantity');
+		return $result ? $result : 0;
+	}
 
 }

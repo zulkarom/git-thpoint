@@ -106,16 +106,7 @@ class Campaign extends \yii\db\ActiveRecord
 		return CustomerPoint::find()->where(['campaign_id' => $this->id, 'customer_id' => $customer, 'reward_id' => 0])->sum('point_value * quantity');
 	}
 	
-	public function getSaleToday(){
-		$result = CustomerPoint::find()
-		->where([
-			'campaign_id' => $this->id, 
-			'reward_id' => 0,
-			])
-		->andWhere('point_at >= CURDATE()')
-		->sum('sale_value * quantity');
-		return $result ? $result : 0;
-	}
+	
 	
 	
 	

@@ -82,7 +82,7 @@ $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed201
           <!-- small box -->
           <div class="small-box bg-green">
             <div class="inner">
-              <h3>RM<?=$campaign->saleToday?></h3>
+              <h3>RM<?=$form->saleToday?></h3>
 
               <p>TOTAL SALE VALUE <br>TODAY</p>
             </div>
