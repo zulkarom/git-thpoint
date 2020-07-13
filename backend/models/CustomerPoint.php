@@ -20,6 +20,9 @@ use yii\helpers\ArrayHelper;
 class CustomerPoint extends \yii\db\ActiveRecord
 {
 	public $customer_phone;
+	public $ringgit;
+	public $hari;
+	public $bulan;
     /**
      * {@inheritdoc}
      */

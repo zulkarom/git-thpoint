@@ -307,6 +307,11 @@ class StaffController extends Controller
 			$model->created_at = new Expression('NOW()');
 			$model->created_by = Yii::$app->user->identity->id;
 			if($model->save()){
+				//send sms
+				$msg = urlencode("RM0.00 Welcome to our point system. Collect 10 points and you'll get 1 free coffee. We are looking forward to meet you again. Thanks. Regards SKYHINT");
+				
+				$xml = file_get_contents("http://www.bulksms2u.com/websmsapi/ISendSMS.aspx?username=zulkarom&password=1q2w3e&message=".$msg."&mobile=6".$phone."&Sender=zulkarom&type=1");
+				
 				return json_encode([0 ,  'good']);
 			}else{
 				return json_encode([1 ,  'Failed to create customer']);

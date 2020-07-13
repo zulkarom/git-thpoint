@@ -7,7 +7,9 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
 use backend\models\Campaign;
+use backend\models\CustomerPoint;
 use backend\models\DashboardForm;
+use yii\helpers\ArrayHelper;
 
 /**
  * Site controller
@@ -80,9 +82,7 @@ class SiteController extends Controller
 			$form->campaign = $campaign->id;
 		}
 		
-		
-		//$campaigns = Campaign::find()->where(['is_active' => 1])->all();
-		
+
         return $this->render('index', [
 		'campaign' => $campaign,
 		'form' => $form,

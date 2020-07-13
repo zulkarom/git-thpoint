@@ -9,18 +9,18 @@ class Common {
     public static function months()
     {
         return [
-			1 => 'Januari',
-			2 => 'Februari',
-			3 => 'Mac',
+			1 => 'January',
+			2 => 'February',
+			3 => 'March',
 			4 => 'April',
-			5 => 'Mei',
-			6 => 'Jun',
-			7 => 'Julai',
-			8 => 'Ogos',
+			5 => 'May',
+			6 => 'June',
+			7 => 'July',
+			8 => 'August',
 			9 => 'September',
-			10 => 'Oktober',
+			10 => 'October',
 			11 => 'November',
-			12 => 'Disember',
+			12 => 'December',
 		];
     }
 	
@@ -29,16 +29,16 @@ class Common {
         return [
 			1 => 'Jan',
 			2 => 'Feb',
-			3 => 'Mac',
+			3 => 'Mar',
 			4 => 'Apr',
-			5 => 'Mei',
+			5 => 'May',
 			6 => 'Jun',
 			7 => 'Jul',
-			8 => 'Ogos',
+			8 => 'Aug',
 			9 => 'Sep',
-			10 => 'Okt',
+			10 => 'Oct',
 			11 => 'Nov',
-			12 => 'Dis',
+			12 => 'Dec',
 		];
     }
 	
