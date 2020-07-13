@@ -41,7 +41,7 @@ class DashboardForm extends Model
 	
 	public function getDailyData(){
 		$monthData = CustomerPoint::find()
-		->select('DAY(point_at) as hari, point_at, sum(sale_value) as ringgit')
+		->select('DAY(point_at) as hari, point_at, sum(sale_value * quantity) as ringgit')
 		->where(['MONTH(point_at)' => $this->month, 'YEAR(point_at)' => $this->year, 'campaign_id' => $this->campaign])
 		->groupBy('hari')
 		->all();
@@ -67,7 +67,7 @@ class DashboardForm extends Model
 	
 	public function getMonthlyData(){
 		$monthData = CustomerPoint::find()
-		->select('MONTH(point_at) as bulan, point_at, sum(sale_value) as ringgit')
+		->select('MONTH(point_at) as bulan, point_at, sum(sale_value * quantity) as ringgit')
 		->where(['YEAR(point_at)' => $this->year, 'campaign_id' => $this->campaign])
 		->groupBy('bulan')
 		->all();
