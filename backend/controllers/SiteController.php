@@ -7,6 +7,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
 use backend\models\Campaign;
+use backend\models\DashboardForm;
 
 /**
  * Site controller
@@ -62,9 +63,29 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-		$campaigns = Campaign::find()->where(['is_active' => 1])->all();
+		$form = new DashboardForm;
+		$form->action = ['site/index'];
+		
+		if(Yii::$app->getRequest()->getQueryParam('DashboardForm')){
+			$data = Yii::$app->getRequest()->getQueryParam('DashboardForm');
+			$form->year = $data['year'];
+			$form->month = $data['month'];
+			$cam = $data['campaign'];
+			$form->campaign = $cam;
+			$campaign = Campaign::findOne($cam);
+		}else{
+			$form->year = date('Y');
+			$form->month = date('n');
+			$campaign = Campaign::find()->where(['is_default' => 1])->one();
+			$form->campaign = $campaign->id;
+		}
+		
+		
+		//$campaigns = Campaign::find()->where(['is_active' => 1])->all();
+		
         return $this->render('index', [
-		'campaigns' => $campaigns
+		'campaign' => $campaign,
+		'form' => $form,
 		]);
     }
 

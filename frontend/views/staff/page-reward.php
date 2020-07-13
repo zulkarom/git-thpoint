@@ -5,6 +5,10 @@
 </style>
 
 <div id="page-reward" style="display:none">
+
+<div class="row">
+<div class="col-md-7">
+
 <div class="table-responsive">
   <table class="table table-striped table-hover">
     <tbody>
@@ -23,7 +27,7 @@
   <input type="text" class="form-control" id="reward_customer_id" value="" style="border-color:#28a745">
   <div class="input-group-append">
   
-  <button class="btn btn-outline-success" type="button" id="btn-search-reward"><i class="icon-search"></i> Search Reward</button>
+  <button class="btn btn-outline-success" type="button" id="btn-search-reward">Search</button>
   
   </div>
 </div>
@@ -33,10 +37,10 @@
 		
       </tr>
 
-	  <tr>
+	  <tr id="row-campaign" style="display:none">
         <td align="right">		
 		<button id="modalReward" type="button" class="btn btn-danger">
-    Select Reward Campaign
+    Select Campaign
 </button>
 		
 		</td>
@@ -47,10 +51,10 @@
 		
 		</td>
       </tr>
-	  <tr>
+	  <tr id="row-product" style="display:none">
         <td align="right">
 		<button id="modalProductReward" type="button" class="btn btn-info">
-    Select Reward Product
+    Select Product
 </button>
 		
 		</td>
@@ -67,7 +71,7 @@
 		
 		</td>
         <td>
-		<button id="btn-issue-reward" type="button" class="btn btn-success">
+		<button id="btn-issue-reward" style="display:none" type="button" class="btn btn-success">
     <i class="icon-gift"></i> Issue Reward
 </button>
 
@@ -82,6 +86,38 @@
 </div>
 
 <div id="issue-result" align="center"></div>
+
+</div>
+<div class="col-md-5">
+
+<div><strong>RECENT REWARD</strong>   <button type="button" id="refresh-rewards" class="btn btn-default btn-sm float-right"> Refresh</button></div>
+
+
+<div class="table-responsive">
+  <table class="table table-striped table-hover mytable2">
+    <thead>
+      <tr>
+	  <th>Date</th>
+        <th>Customer</th>
+		<th>Products</th>
+		
+      </tr>
+    </thead>
+    <tbody id="tb-list-body-reward">
+      
+     
+    </tbody>
+  </table>
+</div>
+
+
+</div>
+
+</div>
+
+
+
+
 
 
 </div>

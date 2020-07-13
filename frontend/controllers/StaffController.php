@@ -334,10 +334,10 @@ class StaffController extends Controller
 					return json_encode([0, $customer->customer_name, $list_reward, $products, $points]);
 					
 				}else{
-					return json_encode([2 ,  'No reward as yet for ' . $customer->customer_name]);
+					return json_encode([2 ,  'no reward as yet for ' . $customer->customer_name]);
 				}
 			}else{
-				return json_encode([1 ,  'Customer not found']);
+				return json_encode([1 ,  'customer not found']);
 			}
 		}
 	}
@@ -358,6 +358,7 @@ class StaffController extends Controller
 			$reward = Yii::$app->request->post('reward');
 			$product = Yii::$app->request->post('product');
 			$model = CustomerReward::findOne($reward);
+			$customer = $model->customer->customer_name;
 			$model->product_reward_id = $product;
 			$model->has_claimed = 1;
 			$model->claimed_at = new Expression('NOW()');
@@ -368,7 +369,7 @@ class StaffController extends Controller
 				$reward = CustomerReward::find()
 				->where(['customer_id' => $model->customer_id, 'has_claimed' => 0])
 				->count();
-				$msg = 'The reward has been successfully issued. <br />
+				$msg = 'The reward has been successfully issued to '. $customer . '. <br />
 				Balance reward ('.$reward.')<br />
 				<button class="btn btn-default" value="'.$model->id .'" id="btn-undo-reward">Undo</button>';
 				return json_encode([0, $msg]);
@@ -384,12 +385,46 @@ class StaffController extends Controller
 			$points = json_decode(Yii::$app->request->post('points'));
 			if($rewards){
 				CustomerReward::deleteAll(['id' => $rewards]);
+				CustomerPoint::updateAll(['reward_id' => 0], ['reward_id' => $rewards]);
 			}
 			if($points){
 				CustomerPoint::deleteAll(['id' => $points]);
 			}
 			return 1;
 		}
+	}
+	
+	public function actionRecentPoints(){
+		$list = CustomerPoint::find()->orderBy('point_at DESC')->limit(5)->all();
+		$html = '';
+		if($list){
+			foreach($list as $row){
+				$val = $row->point_value * $row->quantity;
+			$html .= '<tr>
+			<td>'. date('d M Y', strtotime($row->point_at)) .'</td>
+			<td>'.$row->customer->customer_name .'</td>
+			<td>'.$row->product->product_name .'</td>
+			<td>'. $val .'</td>
+			<td>'.$row->reward_id .'</td>
+		  </tr>';
+			}
+		}
+			return $html;
+	}
+	
+	public function actionRecentRewards(){
+		$list = CustomerReward::find()->orderBy('reward_at DESC')->limit(5)->all();
+		$html = '';
+		if($list){
+			foreach($list as $row){
+			$html .= '<tr>
+			<td>'. date('d M Y', strtotime($row->reward_at)) .'</td>
+			<td>'.$row->customer->customer_name .'</td>
+			<td>'.$row->product->product_name .'</td>
+		  </tr>';
+			}
+		}
+			return $html;
 	}
 	
 	public function actionUndoReward(){

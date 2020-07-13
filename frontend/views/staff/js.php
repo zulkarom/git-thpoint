@@ -6,6 +6,9 @@ use yii\helpers\Url;
 JSRegister::begin(); 
 ?>
 <script>
+
+showRecentPoint();
+
 $("#customer_id").on('keypress',function(e) {
     if(e.which == 13) {
         submitForm();
@@ -171,6 +174,29 @@ $("#slide-point").click(function(){
 	$('#issue-result').html('');
 });
 
+$("#refresh-points").click(function(){
+	showRecentPoint();
+});
+
+function showRecentPoint(){
+	$('#tb-list-body').html('Loading...');
+	$.ajax({url: "<?=Url::to(['/staff/recent-points'])?>", 
+	//timeout: 5000,     // timeout milliseconds
+	type: 'GET',  // http method
+	success: function(result){
+		//console.log(result);
+		$('#tb-list-body').html(result);
+		
+	},
+	error: function (jqXhr, textStatus, errorMessage) { // error callback 
+       $('#tb-list-body').html('Error: ' + errorMessage);
+    }
+  
+  
+  });
+	
+}
+
 function showPhoneModal(){
 	var cam = $("#con-campaign-id").val();
 	var prod = $("#con-product-id").val();
@@ -236,6 +262,7 @@ function closeQtyModal(){
 }
 
 function openRegister(){
+	$("#result-submit").html('');
 	$("#registerModal").modal("show");
 	$("#con-register").focus();
 }
@@ -268,6 +295,7 @@ function ajaxSubmit(){
 					var rewards = $(this).attr('rewards');
 					undoPoints(points, rewards);
 				});
+				showRecentPoint();
 			}else if(res[0] == 1){
 				openRegister();
 			}else{
@@ -299,6 +327,7 @@ function undoPoints(points, rewards){
 
 		if(result == 1){
 			$('#result-submit').html('The action has been undone.');
+			showRecentPoint();
 		}
 		
 	},

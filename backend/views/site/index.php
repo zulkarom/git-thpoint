@@ -10,12 +10,10 @@ use backend\models\Semester;
 $this->title = 'Current Year Overview';
 
 $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');
+?>
 
 
-if($campaigns){
-	foreach($campaigns as $campaign){
-		?>
-		<h4><?=$campaign->campaign_name?></h4>
+<h4><?=$campaign->campaign_name?></h4>
 <section class="content">
       <!-- Info boxes -->
       
@@ -153,9 +151,6 @@ if($campaigns){
 
 
 </section>
-		<?php
-	}
-}
-?>
+
 
 

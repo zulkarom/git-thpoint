@@ -25,6 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'point_at',
             
             'point_value',
+			'sale_value:currency',
 			['class' => 'yii\grid\ActionColumn',
                  'contentOptions' => ['style' => 'width: 3%'],
                 'template' => '{delete}',

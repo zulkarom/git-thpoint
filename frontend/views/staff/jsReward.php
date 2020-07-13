@@ -6,6 +6,9 @@ use yii\helpers\Url;
 JSRegister::begin(); 
 ?>
 <script>
+
+showRecentReward();
+
 $("#btn-search-reward").click(function(){
    initSearch();
 });
@@ -50,6 +53,29 @@ $("#btn-issue-reward").click(function(){
 	//validate customer id
 });
 
+function showRecentReward(){
+	$('#tb-list-body-reward').html('Loading...');
+	$.ajax({url: "<?=Url::to(['/staff/recent-rewards'])?>", 
+	//timeout: 5000,     // timeout milliseconds
+	type: 'GET',  // http method
+	success: function(result){
+		//console.log(result);
+		$('#tb-list-body-reward').html(result);
+		
+	},
+	error: function (jqXhr, textStatus, errorMessage) { // error callback 
+       $('#tb-list-body-reward').html('Error: ' + errorMessage);
+    }
+  
+  
+  });
+	
+}
+
+$("#refresh-rewards").click(function(){
+	showRecentReward();
+});
+
 function issueReward(){
 	$("#search-result").html('Loading...');
 	$.ajax({
@@ -66,13 +92,14 @@ function issueReward(){
 		var res = JSON.parse(result);
 		if(res){
 			if(res[0] == 0){
-				$("#issue-result").html(res[1]);
+				$("#issue-result").html('<i class="icon-check"></i> ' +  res[1]);
 				$("#search-result").html('');
 				emptyEverything();
 				$("#btn-undo-reward").click(function(){
 					var reward = $(this).attr('value');
 					undoReward(reward);
 				});
+				showRecentReward();
 			}else{
 				$("#issue-result").html(res[1]);
 			}
@@ -102,6 +129,19 @@ function initSearch(){
 	
 }
 
+function showRewardButton(boo){
+	if(boo){
+		$("#row-campaign").show();
+		$("#row-product").show();
+		$("#btn-issue-reward").show();
+	}else{
+		$("#row-campaign").hide();
+		$("#row-product").hide();
+		$("#btn-issue-reward").hide();
+	}
+	
+}
+
 function search(){
 	$("#search-result").html('Searching...');
 	$('#issue-result').html('');
@@ -114,8 +154,10 @@ function search(){
 	success: function(result){
 		//$("#search-result").html(result);
 		//console.log(result);
+		
 		var res = JSON.parse(result);
 		if(res[0] == 0){
+			showRewardButton(true);
 			var name = res[1];
 			var kira = Object.keys(res[2]).length;
 			var rewardTxt = kira == 1 ? 'reward' : 'rewards';
@@ -156,6 +198,7 @@ function search(){
 	
 			
 		}else{
+			showRewardButton(false);
 			$("#search-result").html('Sorry, ' + res[1]);
 			emptyEverything();
 		}   
@@ -173,6 +216,7 @@ function emptyEverything(){
 	$("#con-reward-selected-id").val('');
 	$("#con-reward-selected").text('');
 	emptyProductContainer(false);
+	showRewardButton(false);
 }
 
 function emptyProductContainer(loading){

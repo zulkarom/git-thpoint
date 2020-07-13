@@ -15,17 +15,28 @@ if($default){
 
 ?>
 
+<style>
+.mytable2 th, .mytable2 td {
+	padding: 4px;
+	font-size: 14px;
+}
+</style>
+
 <div class="container">
 
 <div id="page-point">
+
+<div class="row">
+<div class="col-md-7">
+
 <div class="table-responsive">
   <table class="table table-striped table-hover">
     <tbody>
       <tr>
         <td width="35%" align="right">
-		<button id="camToQty" type="button" class="btn btn-danger">
+		<!-- <button id="camToQty" type="button" class="btn btn-danger">
     C2Q
-</button> 
+</button>  -->
 		<button id="modalCampaign" type="button" class="btn btn-danger" data-toggle="modal" data-target="#campaignModalPreview">
     Select Campaign
 </button>
@@ -41,9 +52,9 @@ if($default){
       </tr>
       <tr>
         <td align="right">
-		<button id="prodToQty" type="button" class="btn btn-info">
+		<!-- <button id="prodToQty" type="button" class="btn btn-info">
     P2Q
-</button> 
+</button>  -->
 		<button id="modalProduct" type="button" class="btn btn-info">
     Select Product
 </button></td>
@@ -98,6 +109,45 @@ if($default){
 </div>
 
 <div id="result-submit" align="center"></div>
+
+
+</div>
+
+<div class="col-md-5">
+<div><strong>RECENT POINTS</strong>   <button type="button" id="refresh-points" class="btn btn-default btn-sm float-right"> Refresh</button></div>
+
+
+<div class="table-responsive">
+  <table class="table table-striped table-hover mytable2">
+    <thead>
+      <tr>
+	  <th>Date</th>
+        <th>Customer</th>
+		<th>Products</th>
+        <th>Points</th>
+        <th>Reward</th>
+      </tr>
+    </thead>
+    <tbody id="tb-list-body">
+      
+     
+    </tbody>
+  </table>
+</div>
+
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
 
 
 </div>

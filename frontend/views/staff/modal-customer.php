@@ -26,38 +26,9 @@
 			
 	
 	<div class="row">
-<div class="col-md-2"></div>
-
-<div class="col-md-4" align="right">
-
-<button class="btn btn-info btn-lg item-phone" value="011" style="font-size:22px;height:<?=$size?>px;width:<?=$wlong?>px;margin:10px"><b> 011 </b> </button>
-<button class="btn btn-info btn-lg item-phone" value="012" style="font-size:22px;height:<?=$size?>px;width:<?=$wlong?>px;margin:10px"><b> 012 </b> </button>
-<button class="btn btn-info btn-lg item-phone" value="013" style="font-size:22px;height:<?=$size?>px;width:<?=$wlong?>px;margin:10px"><b> 013 </b> </button>
-
-</br />
-<button class="btn btn-info btn-lg item-phone" value="014" style="font-size:22px;height:<?=$size?>px;width:<?=$wlong?>px;margin:10px"><b> 014 </b> </button>
-<button class="btn btn-info btn-lg item-phone" value="015" style="font-size:22px;height:<?=$size?>px;width:<?=$wlong?>px;margin:10px"><b> 015 </b> </button>
-<button class="btn btn-info btn-lg item-phone" value="016" style="font-size:22px;height:<?=$size?>px;width:<?=$wlong?>px;margin:10px"><b> 016 </b> </button>
-
-<br />
+<div class="col-md-4"></div>
 
 
-<button class="btn btn-info btn-lg item-phone" value="013" style="font-size:22px;height:<?=$size?>px;width:<?=$wlong?>px;margin:10px"><b> 017 </b> </button>
-<button class="btn btn-info btn-lg item-phone" value="018" style="font-size:22px;height:<?=$size?>px;width:<?=$wlong?>px;margin:10px"><b> 018 </b> </button>
-<button class="btn btn-info btn-lg item-phone" value="019" style="font-size:22px;height:<?=$size?>px;width:<?=$wlong?>px;margin:10px"><b> 019 </b> </button>
-
-<br />
-
-
-<button class="btn btn-success btn-lg" style="font-size:22px;height:<?=$size?>px;width:<?=$wlong?>px;margin:10px"><b> * </b> </button>
-
-<button class="btn btn-info btn-lg item-phone" value="010" style="font-size:22px;height:<?=$size?>px;width:<?=$wlong?>px;margin:10px"><b> 010 </b> </button>
-<button class="btn btn-success btn-lg" style="font-size:22px;height:<?=$size?>px;width:<?=$wlong?>px;margin:10px"><b> # </b> </button>
-
-
-
-
-</div>
 <div class="col-md-5">
 
 <button class="btn btn-success btn-lg item-phone" value="1" style="font-size:22px;height:<?=$size?>px;width:<?=$size?>px;margin:10px"><b> 1 </b> </button>

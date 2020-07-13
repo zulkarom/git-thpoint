@@ -1,1 +1,6 @@
-apa ni
+
+
+re-arrange button calculator
+put in table of finished point
+hide shorcut button on mobile
+search for accumulated points
